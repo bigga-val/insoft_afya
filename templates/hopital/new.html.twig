@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Hopital{% endblock %}
+
+{% block body %}
+    {% include('./extensions/navbar.html.twig') %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-header bg-primary">
+                        <h3 class="text-white">Nouvel Hopital</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ include('hopital/_form.html.twig') }}
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <a href="{{ path('hopital_index') }}">back to list</a>
+        </div>
+    </div>
+
+{% endblock %}

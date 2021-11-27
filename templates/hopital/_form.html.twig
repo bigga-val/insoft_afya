@@ -1,0 +1,8 @@
+{{ form_start(form) }}
+{#    {{ form_label(form.NomHopital, "Nom Hopital") }}#}
+    {{ form_row(form.NomHopital, {attr:{'class':'form-control'}}) }}
+    {{ form_row(form.Adresse, {attr:{'class':'form-control'}}) }}
+    {{ form_row(form.NoUrgence, {attr:{'class':'form-control'}}) }}
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+

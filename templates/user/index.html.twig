@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    {% include('./extensions/navbar.html.twig') %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading bg-primary">
+                        <h1>User index</h1>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Roles</th>
+                                <th>Password</th>
+                                <th>actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% set counter = 1 %}
+                            {% for user in users %}
+                                <tr>
+                                    <td>{{ counter }}</td>
+                                    <td>{{ user.username|capitalize }}</td>
+                                    <td>
+                                        {% for role in user.roles %}
+                                        {{ role|capitalize }},
+                                        {% endfor %}
+                                    </td>
+{#                                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>#}
+                                    <td>********</td>
+                                    <td>
+                                        <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                                        <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">no records found</td>
+                                </tr>
+                                {% set counter = counter+1 %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+    </div>
+
+    <a href="{{ path('user_new') }}">Create new</a>
+{% endblock %}
