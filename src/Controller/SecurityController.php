@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,11 +28,14 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/logout", name="
-     * ")
+     * @Route("/logout", name="app_logout")
      */
-    public function logout(): void
+    public function logout(): Void_
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+//        try {
+//            return $this->redirectToRoute( "app_login");
+//        }catch (Exception $e){
+//         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+//        }
     }
 }

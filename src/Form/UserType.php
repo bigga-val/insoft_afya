@@ -15,15 +15,17 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('roles', ChoiceType::class,[
-                'choices'=>[
-                    'Patient'=>'ROLE_PATIENT',
-                    'MEDECIN'=>'ROLE_MEDECIN',
-                ],
-                'expanded'=>true,
-                'multiple'=>true,
-                'label'=>'Role :'
-            ])
+//            ->add('roles', ChoiceType::class,[
+//                'choices'=>[
+//                    //'Patient'=>'ROLE_PATIENT',
+//                    'MEDECIN'=>'ROLE_MEDECIN',
+//                ],
+//                'expanded'=>true,
+//                'multiple'=>true,
+//                'label'=>'Role :'
+//            ])
+
+            ->add('email')
             ->add('password')
         ;
     }

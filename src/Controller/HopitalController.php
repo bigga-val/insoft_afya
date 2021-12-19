@@ -79,4 +79,7 @@ class HopitalController extends AbstractController
 
         return $this->redirectToRoute('hopital_index', [], Response::HTTP_SEE_OTHER);
     }
+    public function serviceToHopital(Request $request ){
+        return $this->render('hopital/serviceToHopital.html.twig');
+    }
 }

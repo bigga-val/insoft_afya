@@ -32,7 +32,7 @@ class ServiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $service->setCreatedAt(new \DateTimeImmutable());
-            $service->setCreatedBy($this->getUser()->getUsername());
+            $service->setCreatedBy($this->getUser());
             $service->setStatus('active');
             $entityManager->persist($service);
             $entityManager->flush();

@@ -13,6 +13,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use App\Entity\Person;
 
 class RegistrationController extends AbstractController
 {
@@ -38,21 +39,30 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            $user->setRoles(["ROLE_PATIENT"]);
+            //$user->setEmail($form->get('email'));
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
+            $person = new Person();
+            $person->setCreatedAt(new \DateTimeImmutable());
+            $person->setCreatedBy($user->getUserIdentifier());
+            $person->setEditedAt(new \DateTimeImmutable());
+            $user->setUserPerson($person);
+
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('gabrielkatonge@gmail.com', 'Gabriel Katonge'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+//            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+//                (new TemplatedEmail())
+//                    ->from(new Address('gabrielkatonge@gmail.com', 'Gabriel Katonge'))
+//                    ->to($user->getEmail())
+//                    ->subject('Please Confirm your Email')
+//                    ->htmlTemplate('registration/confirmation_email.html.twig')
+//            );
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('user_show');
+            return $this->redirectToRoute('/login');
         }
 
         return $this->render('registration/register.html.twig', [

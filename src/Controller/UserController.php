@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Person;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -22,9 +23,15 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'user_new', methods: ['GET','POST'])]
+    #[Route('/new', name: 'user_new', methods: ['GET','POST']), ]
+    /**
+     * @param Request $request
+     * @param UserPasswordHasherInterface $passwordHasher
+     * @return Response
+     */
     public function new(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
+        //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -32,9 +39,14 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
             $entityManager = $this->getDoctrine()->getManager();
+            $person = new Person();
+            $user->setUserPerson($person);
+            $user->setRoles(["ROLE_MEDECIN"]);
+            $person->setEditedAt(new \DateTimeImmutable());
+            $person->setCreatedAt(new \DateTimeImmutable());
+            $person->setCreatedBy("kj");
             $entityManager->persist($user);
             $entityManager->flush();
-
             return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -52,6 +64,13 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/dashboard', name:'usesr_dashboard', methods:['Get', 'POST'])]
+    public function dashboard(User $user)
+    {
+        return $this->render('user/dashboard.html.twig',[
+            'user'=>$user,
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET','POST'])]
     public function edit(Request $request, User $user, UserPasswordHasherInterface $hasher): Response
