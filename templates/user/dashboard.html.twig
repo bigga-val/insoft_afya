@@ -24,7 +24,9 @@
                         <td>{{ service.MedecinServiceHopital.Medecin.Person.nomPostnom |capitalize }}</td>
                         <td>{{ service.MedecinServiceHopital.ServiceHopital.Hopital.nomHopital | capitalize }}</td>
                         <td>
-                            <a href="{{ path('discussion_new', {'choix':service.id}) }}">Discussions</a>
+
+                            <a class="" href="{{ path('discussion_new', {'choix':service.id}) }}">Discussions</a>
+                            <button type="button" class="btn btn-outline-success"> Desabonner </button
                         </td>
                     </tr>
 

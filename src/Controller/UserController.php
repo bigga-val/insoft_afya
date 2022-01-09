@@ -6,6 +6,8 @@ use App\Entity\Person;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\ChoixMedecinRepository;
+use App\Repository\DoctorRepository;
+use App\Repository\MedecinServiceHopitalRepository;
 use App\Repository\PatientRepository;
 use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
@@ -107,15 +109,25 @@ class UserController extends AbstractController
 
     #[Route('/{id}/dashboard_doctor', name:'user_dashboard_doctor', methods:['Get', 'POST'])]
     public function dashboard_doctor(User $user, ChoixMedecinRepository $choixMedecinRepository,
-                              PersonRepository $personRepository, PatientRepository $patientRepository
+                                     PersonRepository $personRepository, PatientRepository $patientRepository,
+                                     MedecinServiceHopitalRepository $medecinServiceHopitalRepository,
+                                        DoctorRepository $doctorRepository
     )
     {
+       //dd($user->getId());
 
+        $person = $personRepository->findOneBy(["UserPerson"=>$user->getId()]);
+        $medecin = $doctorRepository->findOneBy(["Person"=>$person->getId()]);
+        $msh = $medecinServiceHopitalRepository->findBy(["medecin"=>$medecin->getId(), "status"=>"active"]);
 
+        //$choixmed = $choixMedecinRepository->findBy(["medecin_service_hopital"=>$msh->getId()]);
         return $this->render('user/dashboard_doctor.html.twig',[
             'user'=>$user,
+            'attributions'=>$msh,
+
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET','POST'])]
     public function edit(Request $request, User $user, UserPasswordHasherInterface $hasher): Response
