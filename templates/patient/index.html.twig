@@ -1,0 +1,43 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Patient index{% endblock %}
+
+{% block body %}
+    <h1>Patient index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Adress</th>
+                <th>Created_At</th>
+                <th>Created_by</th>
+                <th>Picture</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for patient in patients %}
+            <tr>
+                <td>{{ patient.id }}</td>
+                <td>{{ patient.Adress }}</td>
+                <td>{{ patient.createdAt ? patient.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ patient.createdBy }}</td>
+                <td>{{ patient.picture }}</td>
+                <td>
+                    <a href="{{ path('patient_show', {'id': patient.id}) }}">show</a>
+                    <a href="{{ path('patient_edit', {'id': patient.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+{% endblock %}

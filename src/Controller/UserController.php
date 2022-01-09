@@ -5,16 +5,42 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\ChoixMedecinRepository;
+use App\Repository\PatientRepository;
+use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
+use mysql_xdevapi\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
+
+    #[Route('/indexes', name: 'user_indexes', methods: ['GET'])]
+    public function indexes(UserRepository $userRepository, Request $request): Response
+    {
+        $session = $request->getSession();
+        //$session->start();
+        if(in_array("ROLE_PATIENT", $this->getUser()->getRoles(), true)){
+            $session->set('role', 'Patient');
+            return $this->redirect($this->generateUrl("user_dashboard", ["id"=>$this->getUser()->getId()]));
+        }else if(in_array("ROLE_MEDECIN", $this->getUser()->getRoles(), true)){
+            $session->set('role', 'Medecin');
+            return $this->redirect($this->generateUrl("user_dashboard_doctor", ["id"=>$this->getUser()->getId()]));
+        }else if(in_array("ROLE_HOPITAL", $this->getUser()->getRoles(), true)){
+            $session->set('role', 'Hopital');
+            return $this->redirect($this->generateUrl("user_dashboard_hopital", ["id"=>$this->getUser()->getId()]));
+        }else if(in_array("ROLE_ADMIN", $this->getUser()->getRoles(), true)){
+            $session->set('role', 'Admin');
+            return $this->redirect($this->generateUrl("user_dashboard_admin", ["id"=>$this->getUser()->getId()]));
+        }
+    }
+
     #[Route('/', name: 'user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
@@ -64,10 +90,29 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/dashboard', name:'usesr_dashboard', methods:['Get', 'POST'])]
-    public function dashboard(User $user)
+    #[Route('/{id}/dashboard', name:'user_dashboard', methods:['Get', 'POST'])]
+    public function dashboard(User $user, ChoixMedecinRepository $choixMedecinRepository,
+                                PersonRepository $personRepository, PatientRepository $patientRepository
+    )
     {
+        $loggedPerson = $personRepository->findOneBy(['UserPerson'=>$user->getId()]);
+        $patient = $patientRepository->findOneBy(['Person'=>$loggedPerson->getId()]);
+        $services = $choixMedecinRepository->findBy(['patient'=>$patient->getId()]);
+
         return $this->render('user/dashboard.html.twig',[
+            'user'=>$user,
+            'services'=> $services
+        ]);
+    }
+
+    #[Route('/{id}/dashboard_doctor', name:'user_dashboard_doctor', methods:['Get', 'POST'])]
+    public function dashboard_doctor(User $user, ChoixMedecinRepository $choixMedecinRepository,
+                              PersonRepository $personRepository, PatientRepository $patientRepository
+    )
+    {
+
+
+        return $this->render('user/dashboard_doctor.html.twig',[
             'user'=>$user,
         ]);
     }

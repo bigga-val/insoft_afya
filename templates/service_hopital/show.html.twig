@@ -1,0 +1,34 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}ServiceHopital{% endblock %}
+
+{% block body %}
+    <h1>ServiceHopital</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ service_hopital.id }}</td>
+            </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ service_hopital.createdBy }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ service_hopital.createdAt ? service_hopital.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ service_hopital.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('service_hopital_index') }}">back to list</a>
+
+    <a href="{{ path('service_hopital_edit', {'id': service_hopital.id}) }}">edit</a>
+
+    {{ include('service_hopital/_delete_form.html.twig') }}
+{% endblock %}

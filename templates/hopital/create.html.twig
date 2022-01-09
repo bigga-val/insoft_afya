@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Hopital{% endblock %}
+
+{% block body %}
+    {% include('./extensions/navbar.html.twig') %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading bg-primary">
+                        <h3>Creer un Nouvel Hopital</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form name="createHopital" method="post">
+                            <input type="hidden" value="{{ csrf_token('csrf_token') }}" name="csrf_token">
+                            <label for="Nom Hopital">Nom Hopital(Nom d'Utilisateur) *</label>
+                            <input type="text" name="NomHopital" required class="form-control">
+                            <label for="">Adresse Physique</label>
+                            <input type="text" name="AdressHopital" class="form-control">
+                            <label for="">No Urgence</label>
+                            <input type="text" name="NoUrgence" class="form-control">
+                            <label for="">Email *</label>
+                            <input type="email" name="emailHopital" required class="form-control">
+                            <label for="">Mot de passe *</label>
+                            <input type="text" name="passwordHopital" class="form-control">
+                            <hr>
+                            <input type="submit" name="btnSubmit" class="btn btn-sm btn-success">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+            <a href="{{ path('hopital_index') }}">back to list</a>
+
+        </div>
+    </div>
+
+{% endblock %}

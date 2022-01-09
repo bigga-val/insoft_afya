@@ -1,0 +1,70 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Doctor index{% endblock %}
+
+{% block body %}
+    <h1>Liste des Medecins</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricule</th>
+                <th>Telephone</th>
+                <th>ProfilePicture</th>
+                <th>Created_by</th>
+                <th>Created_At</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.id }}</td>
+                <td>{{ doctor.Matricule }}</td>
+                <td>{{ doctor.telephone }}</td>
+                <td>{{ doctor.profilePicture }}</td>
+                <td>{{ doctor.createdBy }}</td>
+                <td>{{ doctor.createdAt ? doctor.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('doctor_show', {'id': doctor.id}) }}">Details</a>
+                    <a href="{{ path('doctor_edit', {'id': doctor.id}) }}">Editer</a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td class="text-center text-danger" colspan="7">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('doctor_new') }}">Create new</a>
+    <script src="{{ asset("assets/js/jquery.min.js") }}"></script>
+    <script>
+        $(document).ready(function(e){
+            $(".btnCreateRelation").on('click', function(e){
+                let patientID = {{ app.user.id }}
+                    console.log(patientID)
+                let medecinID = $(this).attr("id")
+                console.log(medecinID)
+                if(patientID != "" && medecinID != ""){
+                    $.ajax({
+                        type: "POST",
+                        url: "/choix_medecin/createRelationToDoctorJson",
+                        data: {
+                            medecinID: medecinID
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            console.log(response);
+                        }
+                    })
+                }
+
+            })
+
+        })
+    </script>
+{% endblock %}

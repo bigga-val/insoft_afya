@@ -1,0 +1,42 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Doctor{% endblock %}
+
+{% block body %}
+    <h1>Doctor</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ doctor.id }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ doctor.Matricule }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ doctor.telephone }}</td>
+            </tr>
+            <tr>
+                <th>ProfilePicture</th>
+                <td>{{ doctor.profilePicture }}</td>
+            </tr>
+            <tr>
+                <th>Created_by</th>
+                <td>{{ doctor.createdBy }}</td>
+            </tr>
+            <tr>
+                <th>Created_At</th>
+                <td>{{ doctor.createdAt ? doctor.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('doctor_index') }}">back to list</a>
+
+    <a href="{{ path('doctor_edit', {'id': doctor.id}) }}">edit</a>
+
+    {{ include('doctor/_delete_form.html.twig') }}
+{% endblock %}

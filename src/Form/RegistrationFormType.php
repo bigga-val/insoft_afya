@@ -46,7 +46,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('roles', ChoiceType::class,[
+            /*->add('roles', ChoiceType::class,[
                 'choices'=>[
                     'MEDECIN'=>'ROLE_MEDECIN',
                     'HOPITAL'=>'ROLE_HOPITAL',
@@ -54,7 +54,7 @@ class RegistrationFormType extends AbstractType
                 'expanded'=>true,
                 'multiple'=>false,
                 'label'=>'Role :'
-            ])
+            ])*/
         ;
     }
 

@@ -1,0 +1,38 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <h3>Dashboard</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Services Souscrits</h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Service</td>
+                        <td>Medecin</td>
+                        <td>Hopital</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set i = 0 %}
+                {% for service in services %}
+                    {% set i = i+1 %}
+                    <tr>
+                        <td>{{ i }}</td>
+                        <td>{{ service.MedecinServiceHopital.ServiceHopital.Service.nomService | capitalize }}</td>
+                        <td>{{ service.MedecinServiceHopital.Medecin.Person.nomPostnom |capitalize }}</td>
+                        <td>{{ service.MedecinServiceHopital.ServiceHopital.Hopital.nomHopital | capitalize }}</td>
+                        <td>
+                            <a href="{{ path('discussion_new', {'choix':service.id}) }}">Discussions</a>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+    </div>
+{% endblock %}

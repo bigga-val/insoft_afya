@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ChoixMedecin{% endblock %}
+
+{% block body %}
+    <h1>Create new ChoixMedecin</h1>
+
+    {{ include('choix_medecin/_form.html.twig') }}
+
+    <a href="{{ path('choix_medecin_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}ServiceHopital index{% endblock %}
+
+{% block body %}
+    <h1>Services Medicaux des hopitaux</h1>
+
+    <table class="table table-responsive table-bordered table-bordered">
+        <thead class="bg-custom">
+            <tr>
+                <th>#</th>
+                <th>Hopital</th>
+                <th>Service</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set i = 0 %}
+        {% for service_hopital in service_hopitals %}
+            {% set i = i+1 %}
+            <tr>
+                <td>{{ i }}</td>
+                <td>{{ service_hopital.Hopital.nomHopital }}</td>
+                <td>{{ service_hopital.Service.nomService }}</td>
+
+                <td>
+                    <a href="{{ path('service_hopital_show', {'id': service_hopital.id}) }}">show</a>
+                    <a href="{{ path('service_hopital_edit', {'id': service_hopital.id}) }}">edit</a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('service_hopital_new') }}">Create new</a>
+
+{% endblock %}

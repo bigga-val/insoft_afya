@@ -1,0 +1,46 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}New ServiceHopital{% endblock %}
+
+{% block body %}
+    <h1>Atribuer un Service à un hopital</h1>
+
+    <form class="form-sample" method="post">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Hopital</label>
+                    <input type="hidden" value="{{ csrf_token('csrf_token') }}" name="csrf_token">
+                    <div class="col-sm-9">
+                        <select name="hopitalID" class="form-control" id="">
+                            {% for hopital in hopitals %}
+                            <option value="{{ hopital.id }}">{{ hopital.nomHopital }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Service</label>
+                    <div class="col-sm-9">
+                        <select name="serviceID" class="form-control" id="">
+                            {% for service in services %}
+                                <option value="{{ service.id }}">{{ service.nomService }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <input type="submit" class="btn btn-primary btn-sm" value="Enregistrer">
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <a href="{{ path('service_hopital_index') }}">back to list</a>
+{% endblock %}

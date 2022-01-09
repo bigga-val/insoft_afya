@@ -39,10 +39,6 @@ class Service
      */
     private $status;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=ServiceHopital::class, mappedBy="serviceID")
-     */
-    private $serviceHopitals;
 
     public function __construct()
     {
@@ -102,30 +98,4 @@ class Service
         return $this;
     }
 
-    /**
-     * @return Collection|ServiceHopital[]
-     */
-    public function getServiceHopitals(): Collection
-    {
-        return $this->serviceHopitals;
-    }
-
-    public function addServiceHopital(ServiceHopital $serviceHopital): self
-    {
-        if (!$this->serviceHopitals->contains($serviceHopital)) {
-            $this->serviceHopitals[] = $serviceHopital;
-            $serviceHopital->addServiceID($this);
-        }
-
-        return $this;
-    }
-
-    public function removeServiceHopital(ServiceHopital $serviceHopital): self
-    {
-        if ($this->serviceHopitals->removeElement($serviceHopital)) {
-            $serviceHopital->removeServiceID($this);
-        }
-
-        return $this;
-    }
 }

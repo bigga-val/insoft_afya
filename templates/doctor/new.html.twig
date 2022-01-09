@@ -1,0 +1,38 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Create Hopital{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading bg-default">
+                    Creer un Nouveau Docteur
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post">
+                        <input type="hidden" value="{{ csrf_token('csrf_token') }}" name="csrf_token">
+                        <label for="">Nom et Post(Nom d'utilisateur) *</label>
+                        <input type="text" class="form-control" required name="DoctorName">
+                        <label for="">Matricule *</label>
+                        <input type="text" class="form-control" required name="DoctorMatricule">
+                        <label for="">Telephone *</label>
+                        <input type="text" class="form-control" required name="Doctortelephone">
+                        <label for="">Email *</label>
+                        <input type="text" class="form-control" required name="DoctorEmail">
+                        <label for="">Mot de passe *</label>
+                        <input type="text" class="form-control" required name="DoctorPassword">
+                        <hr>
+                        <input type="submit" class="btn btn-primary" value="Enregistrer">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+    <a href="{{ path('doctor_index') }}">back to list</a>
+{% endblock %}

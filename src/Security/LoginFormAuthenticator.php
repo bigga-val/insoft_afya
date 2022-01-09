@@ -5,6 +5,7 @@ namespace App\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -46,15 +47,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        //$session = $this->getRequest()->getSession();
+        //$session->start();
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
 //            return new RedirectResponse($this->UrlGenerator->generate('user'));
-
             return new RedirectResponse($this->urlGenerator
                 ->generate('hopital'));
-
         }
-
-        return new RedirectResponse($this->urlGenerator->generate('hopital_index'));
+        return new RedirectResponse($this->urlGenerator->generate('user_indexes'));
         // For example:
         //return new RedirectResponse($this->urlGenerator->generate('some_route'));
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);

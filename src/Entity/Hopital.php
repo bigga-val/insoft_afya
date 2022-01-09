@@ -34,10 +34,13 @@ class Hopital
      */
     private $NoUrgence;
 
+
     /**
-     * @ORM\ManyToMany(targetEntity=ServiceHopital::class, mappedBy="hopitalID")
+     * @ORM\OneToOne(targetEntity=Person::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $serviceHopitals;
+    private $Person;
+
 
     public function __construct()
     {
@@ -85,30 +88,20 @@ class Hopital
         return $this;
     }
 
-    /**
-     * @return Collection|ServiceHopital[]
-     */
-    public function getServiceHopitals(): Collection
+
+
+
+
+    public function getPerson(): ?Person
     {
-        return $this->serviceHopitals;
+        return $this->Person;
     }
 
-    public function addServiceHopital(ServiceHopital $serviceHopital): self
+    public function setPerson(Person $Person): self
     {
-        if (!$this->serviceHopitals->contains($serviceHopital)) {
-            $this->serviceHopitals[] = $serviceHopital;
-            $serviceHopital->addHopitalID($this);
-        }
+        $this->Person = $Person;
 
         return $this;
     }
 
-    public function removeServiceHopital(ServiceHopital $serviceHopital): self
-    {
-        if ($this->serviceHopitals->removeElement($serviceHopital)) {
-            $serviceHopital->removeHopitalID($this);
-        }
-
-        return $this;
-    }
 }

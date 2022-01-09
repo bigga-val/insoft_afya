@@ -1,27 +1,25 @@
 
-{% extends "base.html.twig" %}
+{% extends "baseAdmin.html.twig" %}
 {% block body %}
-    {% include './extensions/navbar.html.twig' %}
-    <div class="container">
+{#    {% include './extensions/navbar.html.twig' %}#}
+
         <div class="row">
             <div class="panel">
-                <div class="panel-header bg-primary">
-
-                    <h3 class="text-left text-white text-center" href="">
+                <div class="panel-header">
+                    <h3 class="text-left text-center" href="">
                         Listes des Hopitaux
                     </h3>
                 </div>
                 <div class="panel-body">
-
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>NomHopital</th>
-                            <th>Adresse</th>
-                            <th>No Urgence</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>NomHopital</th>
+                                <th>Adresse</th>
+                                <th>No Urgence</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
                         {% set counter=1 %}
@@ -46,8 +44,8 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <a class="" href="{{ path('hopital_new') }}">Create new</a>
+
     </div>
+    <a class="" href="{{ path('hopital_new') }}">Create new</a>
 
 {% endblock %}

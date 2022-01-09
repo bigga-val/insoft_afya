@@ -1,0 +1,71 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}MedecinServiceHopital index{% endblock %}
+
+{% block body %}
+    <h1>MedecinServiceHopital index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom Medecin</th>
+                <th>Matricule</th>
+                <th>Hopital</th>
+                <th>Service</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set i = 0 %}
+        {% for medecin_service_hopital in medecin_service_hopitals %}
+            {% set i = i + 1 %}
+            <tr>
+                <td>{{ i }}</td>
+                <td>{{ medecin_service_hopital.Medecin.Person.nomPostnom | capitalize }}</td>
+                <td>{{ medecin_service_hopital.Medecin.matricule | upper }}</td>
+                <td>{{ medecin_service_hopital.ServiceHopital.Hopital.nomHopital | capitalize }}</td>
+                <td>{{ medecin_service_hopital.ServiceHopital.Service.nomService | capitalize }}</td>
+                <td>
+                    <a href="{{ path('medecin_service_hopital_show', {'id': medecin_service_hopital.id}) }}">show</a>
+                    <a href="{{ path('medecin_service_hopital_edit', {'id': medecin_service_hopital.id}) }}">edit</a>
+                    <a class="btnCreateRelation" id="{{ medecin_service_hopital.id }}" href="#!" role="button">Choisir</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('medecin_service_hopital_new') }}">Create new</a>
+    <script src="{{ asset("assets/js/jquery.min.js") }}"></script>
+    <script>
+        $(document).ready(function(e){
+            $(".btnCreateRelation").on('click', function(e){
+                let patientID = {{ app.user.id }}
+                    console.log(patientID)
+                let medecinID = $(this).attr("id")
+                console.log(medecinID)
+                if(patientID != "" && medecinID != ""){
+                    $.ajax({
+                        type: "POST",
+                        url: "/choix_medecin/createRelationToDoctorJson",
+                        data: {
+                            medecinID: medecinID,
+                            patientID: patientID
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            console.log(response);
+                        }
+                    })
+                }
+
+            })
+
+        })
+    </script>
+{% endblock %}

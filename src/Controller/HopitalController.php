@@ -3,11 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Hopital;
+use App\Entity\Patient;
+use App\Entity\Person;
+use App\Entity\User;
 use App\Form\HopitalType;
+use App\Entity\ServiceHopital;
+use App\Form\ServiceHopitalType;
 use App\Repository\HopitalRepository;
+use App\Repository\ServiceHopitalRepository;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/hopital')]
@@ -20,6 +28,50 @@ class HopitalController extends AbstractController
             'hopitals' => $hopitalRepository->findAll(),
         ]);
     }
+
+    #[Route('/create', name:'hopital_create', methods:['GET', 'POST'])]
+    public function create(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        if($request->isMethod('POST')){
+            //dump($request->request);
+            if($this->isCsrfTokenValid('csrf_token', $request->request->get('csrf_token')))
+            {
+                //var_dump($request->request);
+                $user = new User();
+                $user->setRoles(["ROLE_HOPITAL"]);
+                $user->setEmail($request->request->get('emailHopital'));
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $request->request->get('passwordHopital')
+                    ));
+                $user->setUsername($request->request->get('NomHopital'));
+                $user->setEmail($request->request->get('emailHopital'));
+                $entityManager->persist($user);
+                $person = new Person();
+                $person->setUserPerson($user);
+                $person->setEditedAt(new \DateTimeImmutable());
+                $person->setCreatedBy($request->request->get('NomHopital'));
+                $person->setCreatedAt(new \DateTimeImmutable());
+                $entityManager->persist($person);
+                $hopital = new Hopital();
+                $hopital->setPerson($person);
+                $hopital->setAdresse($request->request->get('AdressHopital'));
+                $hopital->setNomHopital($request->request->get('NomHopital'));
+                $hopital->setNoUrgence($request->request->get('NoUrgence'));
+
+                $entityManager->persist($hopital);
+
+                $entityManager->flush();
+            }else{
+
+            }
+        }
+
+        return $this->render('hopital/create.html.twig');
+    }
+
 
     #[Route('/new', name: 'hopital_new', methods: ['GET','POST'])]
     public function new(Request $request): Response
@@ -79,7 +131,18 @@ class HopitalController extends AbstractController
 
         return $this->redirectToRoute('hopital_index', [], Response::HTTP_SEE_OTHER);
     }
-    public function serviceToHopital(Request $request ){
+
+
+    #[Route('/news', name: 'service_Hopital', methods: ['GET','POST'])]
+    public function serviceToHopital(Request $request, ServiceHopital $serviceHopital): Response
+    {
+        $form = $this->createForm(ServiceHopitalType::class, $serviceHopital);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $serviceHopital->setCreatedBy($this->getUser());
+            $serviceHopital->setCreatedAt(new \DateTimeImmutable());
+            $serviceHopital->setStatus(1);
+        }
         return $this->render('hopital/serviceToHopital.html.twig');
     }
 }

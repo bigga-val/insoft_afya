@@ -52,6 +52,22 @@ class Person
      */
     private $editedAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="person", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $UserPerson;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Patient::class, mappedBy="Person", cascade={"persist", "remove"})
+     */
+    private $Adress;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Patient::class, mappedBy="Person", cascade={"persist", "remove"})
+     */
+    private $person;
+
 
 
     public function getId(): ?int
@@ -139,6 +155,52 @@ class Person
     public function setEditedAt(\DateTimeImmutable $editedAt): self
     {
         $this->editedAt = $editedAt;
+
+        return $this;
+    }
+
+    public function getUserPerson(): ?User
+    {
+        return $this->UserPerson;
+    }
+
+    public function setUserPerson(User $UserPerson): self
+    {
+        $this->UserPerson = $UserPerson;
+
+        return $this;
+    }
+
+    public function getAdress(): ?Patient
+    {
+        return $this->Adress;
+    }
+
+    public function setAdress(Patient $Adress): self
+    {
+        // set the owning side of the relation if necessary
+        if ($Adress->getPerson() !== $this) {
+            $Adress->setPerson($this);
+        }
+
+        $this->Adress = $Adress;
+
+        return $this;
+    }
+
+    public function getPerson(): ?Patient
+    {
+        return $this->person;
+    }
+
+    public function setPerson(Patient $person): self
+    {
+        // set the owning side of the relation if necessary
+        if ($person->getPerson() !== $this) {
+            $person->setPerson($this);
+        }
+
+        $this->person = $person;
 
         return $this;
     }

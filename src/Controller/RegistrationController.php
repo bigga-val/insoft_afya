@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Patient;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
@@ -33,6 +34,8 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+
+            $entityManager = $this->getDoctrine()->getManager();
             $user->setPassword(
             $userPasswordHasherInterface->hashPassword(
                     $user,
@@ -42,14 +45,18 @@ class RegistrationController extends AbstractController
             $user->setRoles(["ROLE_PATIENT"]);
             //$user->setEmail($form->get('email'));
 
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $person = new Person();
             $person->setCreatedAt(new \DateTimeImmutable());
             $person->setCreatedBy($user->getUserIdentifier());
             $person->setEditedAt(new \DateTimeImmutable());
-            $user->setUserPerson($person);
-
+            $user->setPerson($person);
+            $entityManager->persist($person);
+            $patient = new Patient();
+            $patient->setCreatedAt(new \DateTime());
+            $patient->setCreatedBy($user->getUserIdentifier());
+            $patient->setPerson($person);
+            $entityManager->persist($patient);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
@@ -62,7 +69,7 @@ class RegistrationController extends AbstractController
 //            );
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('/login');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [

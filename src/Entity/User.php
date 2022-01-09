@@ -49,10 +49,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     /**
-     * @ORM\OneToOne(targetEntity=Person::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity=Person::class, mappedBy="UserPerson", cascade={"persist", "remove"})
      */
-    private $userPerson;
+    private $person;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $created_by;
+
 
     public function getId(): ?int
     {
@@ -162,15 +172,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUserPerson(): ?Person
+    public function getPerson(): ?Person
     {
-        return $this->userPerson;
+        return $this->person;
     }
 
-    public function setUserPerson(Person $userPerson): self
+    public function setPerson(Person $person): self
     {
-        $this->userPerson = $userPerson;
+        // set the owning side of the relation if necessary
+        if ($person->getUserPerson() !== $this) {
+            $person->setUserPerson($this);
+        }
+
+        $this->person = $person;
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?string
+    {
+        return $this->created_by;
+    }
+
+    public function setCreatedBy(?string $created_by): self
+    {
+        $this->created_by = $created_by;
+
+        return $this;
+    }
+
 }
