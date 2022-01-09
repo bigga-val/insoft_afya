@@ -74,7 +74,6 @@ class Person
     {
         return $this->id;
     }
-
     public function getNomPostnom(): ?string
     {
         return $this->nomPostnom;
