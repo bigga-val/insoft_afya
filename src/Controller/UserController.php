@@ -10,6 +10,7 @@ use App\Repository\DoctorRepository;
 use App\Repository\MedecinServiceHopitalRepository;
 use App\Repository\PatientRepository;
 use App\Repository\PersonRepository;
+use App\Repository\RendezvousRepository;
 use App\Repository\UserRepository;
 use mysql_xdevapi\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -94,13 +95,14 @@ class UserController extends AbstractController
 
     #[Route('/{id}/dashboard', name:'user_dashboard', methods:['Get', 'POST'])]
     public function dashboard(User $user, ChoixMedecinRepository $choixMedecinRepository,
-                                PersonRepository $personRepository, PatientRepository $patientRepository
+                                PersonRepository $personRepository, PatientRepository $patientRepository,
+                                RendezvousRepository $rendezvousRepository
     )
     {
         $loggedPerson = $personRepository->findOneBy(['UserPerson'=>$user->getId()]);
         $patient = $patientRepository->findOneBy(['Person'=>$loggedPerson->getId()]);
         $services = $choixMedecinRepository->findBy(['patient'=>$patient->getId()]);
-
+        $rendezvous = $rendezvousRepository->findBy(['']);
         return $this->render('user/dashboard.html.twig',[
             'user'=>$user,
             'services'=> $services
