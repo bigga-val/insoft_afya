@@ -14,8 +14,6 @@ class RendezvousType extends AbstractType
         $builder
             ->add('motif')
             ->add('HeureRendezvous')
-            ->add('createdAt')
-            ->add('createdBy')
             ->add('ChoixMedecin')
         ;
     }

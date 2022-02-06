@@ -102,7 +102,7 @@ class UserController extends AbstractController
         $loggedPerson = $personRepository->findOneBy(['UserPerson'=>$user->getId()]);
         $patient = $patientRepository->findOneBy(['Person'=>$loggedPerson->getId()]);
         $services = $choixMedecinRepository->findBy(['patient'=>$patient->getId()]);
-        $rendezvous = $rendezvousRepository->findBy(['']);
+        //$rendezvous = $rendezvousRepository->findBy(['']);
         return $this->render('user/dashboard.html.twig',[
             'user'=>$user,
             'services'=> $services

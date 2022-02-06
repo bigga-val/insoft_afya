@@ -32,6 +32,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Username</th>
+                                <th>Email</th>
                                 <th>Roles</th>
                                 <th>Password</th>
                                 <th>actions</th>
@@ -43,13 +44,14 @@
                                 <tr>
                                     <td>{{ counter }}</td>
                                     <td>{{ user.username|capitalize }}</td>
+
+                                    <td>{{ user.email | capitalize }}</td>
                                     <td>
                                         {% for role in user.roles %}
                                         {{ role|capitalize }},
                                         {% endfor %}
                                     </td>
-                                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-{##}                                    <td>********</td>
+                                    <td>********</td>
                                     <td>
                                         <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
                                         <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
