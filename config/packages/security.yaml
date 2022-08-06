@@ -37,8 +37,9 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # - {path: ^/patient, roles: ROLE_PATIENT}
 
     role_hierarchy:
-        ROLE_PATIENT: ROLE_MEDECIN
-        ROLLE_HOPITAL: ROLE_ADMIN
-        ROLE_SUPER: ROLE_ADMIN
+        ROLE_MEDECIN: ROLE_PATIENT
+        ROLLE_HOPITAL: ROLE_MEDECIN
+        ROLE_ADMIN: ROLE_HOPITAL

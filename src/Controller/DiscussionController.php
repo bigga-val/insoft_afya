@@ -32,8 +32,8 @@ class DiscussionController extends AbstractController
     public function new(DiscussionRepository $discussionRepository, Request $request, $choix): Response
     {
         $discussion = new Discussion();
-        $discussions = $discussionRepository->findBy(['choixMedecin'=>$choix, 'user'=>$this->getUser()->getId()]);
-
+        $discussions = $discussionRepository->findBy(['choixMedecin'=>$choix], ['id'=>'DESC']);
+        //dd($discussions);
         return $this->render('discussion/new.html.twig', [
             'discussions' => $discussions,
             'choix' => $choix

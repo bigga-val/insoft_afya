@@ -12,6 +12,7 @@ use App\Form\ServiceHopitalType;
 use App\Repository\HopitalRepository;
 use App\Repository\ServiceHopitalRepository;
 use phpDocumentor\Reflection\Types\This;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +65,7 @@ class HopitalController extends AbstractController
                 $entityManager->persist($hopital);
 
                 $entityManager->flush();
+                return $this->redirectToRoute("hopital_index");
             }else{
 
             }
@@ -73,7 +75,7 @@ class HopitalController extends AbstractController
     }
 
 
-    #[Route('/new', name: 'hopital_new', methods: ['GET','POST'])]
+    #[Route('/new', name: 'hopital_new', methods: ['GET','POST']), IsGranted('ROLE_ADMIN')]
     public function new(Request $request): Response
     {
         $hopital = new Hopital();
@@ -82,6 +84,7 @@ class HopitalController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
             $entityManager->persist($hopital);
             $entityManager->flush();
 

@@ -1,6 +1,5 @@
 {{ form_start(form) }}
     {{ form_row(form.motif, {attr:{'class':'form-control'}}) }}
-    {{ form_row(form.HeureRendezvous, {attr:{'class':'form-control datetimepicker'}}) }}
-    {{ form_row(form.ChoixMedecin, {attr:{'class':'form-control'}}) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <input type="datetime-local" name="heuremotif" class="form-control">
+    <button class="btn btn-sm btn-primary">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

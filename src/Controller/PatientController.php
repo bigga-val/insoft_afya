@@ -17,6 +17,7 @@ class PatientController extends AbstractController
     #[Route('/', name: 'patient_index', methods: ['GET'])]
     public function index(PatientRepository $patientRepository): Response
     {
+        $this->denyAccessUnlessGranted("ROLE_MEDECIN", null, "User tried to access patient list with access right");
         return $this->render('patient/index.html.twig', [
             'patients' => $patientRepository->findAll(),
         ]);

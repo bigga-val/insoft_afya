@@ -12,9 +12,9 @@ class RendezvousType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('motif')
-            ->add('HeureRendezvous')
-            ->add('ChoixMedecin')
+            //->add('motif')
+           // ->add('heurerendezvous')
+            //->add('ChoixMedecin')
         ;
     }
 

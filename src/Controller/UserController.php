@@ -44,12 +44,18 @@ class UserController extends AbstractController
         }
     }
 
+
     #[Route('/', name: 'user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
+        if($this->isGranted("ROLE_ADMIN")){
+            return $this->render('user/index.html.twig', [
+                'users' => $userRepository->findAll(),
+            ]);
+        }
+
+        return new \Exception("Access Denyes");
+
     }
 
     #[Route('/new', name: 'user_new', methods: ['GET','POST']), ]
@@ -64,7 +70,6 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
             $entityManager = $this->getDoctrine()->getManager();
@@ -78,7 +83,6 @@ class UserController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -117,16 +121,13 @@ class UserController extends AbstractController
     )
     {
        //dd($user->getId());
-
         $person = $personRepository->findOneBy(["UserPerson"=>$user->getId()]);
         $medecin = $doctorRepository->findOneBy(["Person"=>$person->getId()]);
         $msh = $medecinServiceHopitalRepository->findBy(["medecin"=>$medecin->getId(), "status"=>"active"]);
-
         //$choixmed = $choixMedecinRepository->findBy(["medecin_service_hopital"=>$msh->getId()]);
         return $this->render('user/dashboard_doctor.html.twig',[
             'user'=>$user,
             'attributions'=>$msh,
-
         ]);
     }
 
@@ -136,13 +137,10 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
 //            $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
-
             $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
         }
 

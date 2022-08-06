@@ -57,7 +57,7 @@ class DoctorController extends AbstractController
                 $medecin->setTelephone($request->request->get("Doctortelephone"));
                 $entityManager->persist($medecin);
                 $entityManager->flush();
-
+                return $this->render("doctor_index");
             }
         }
         $doctor = new Doctor();
